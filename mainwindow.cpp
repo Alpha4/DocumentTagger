@@ -2,6 +2,7 @@
 #include "ui_mainwindow.h"
 
 #include <QDesktopServices>
+#include <QUrl>
 #include <iostream>
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -35,7 +36,6 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->filesView->setResizeMode(QListView::Adjust);
     ui->filesView->setIconSize(icon_size);
     ui->filesView->setRootIndex(findex);
-
 }
 
 MainWindow::~MainWindow()
@@ -51,7 +51,16 @@ void MainWindow::on_dirView_clicked(const QModelIndex &index)
 
 void MainWindow::on_filesView_doubleClicked(const QModelIndex &index)
 {
-    QString path = fileModel->fileInfo(index).absoluteFilePath();
-    ui->filesView->setRootIndex(fileModel->setRootPath(path));
+    QFileInfo file = fileModel->fileInfo(index);
+
+    if (file.isDir() && !file.absoluteFilePath().contains(".app",Qt::CaseInsensitive)) {
+        ui->filesView->setRootIndex(fileModel->setRootPath(file.absoluteFilePath()));
+    } else if (file.isSymLink()) {
+      std::cout << file.symLinkTarget().toStdString() << std::endl;
+      ui->filesView->setRootIndex(fileModel->setRootPath(file.symLinkTarget()));
+    } else {
+        QString fileUrl = "file://"+file.absoluteFilePath();
+        std::cout << QDesktopServices::openUrl(QUrl(fileUrl)) << std::endl;
+    }
 }
 
