@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QFileSystemModel>
 
 namespace Ui {
 class MainWindow;
@@ -17,6 +18,8 @@ public:
 
 private:
     Ui::MainWindow *ui;
+    QFileSystemModel* dirModel;
+    QFileSystemModel* fileModel;
 };
 
 #endif // MAINWINDOW_H
