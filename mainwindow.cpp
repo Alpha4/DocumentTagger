@@ -24,8 +24,16 @@ MainWindow::MainWindow(QWidget *parent) :
 
     fileModel->setFilter(QDir::NoDotAndDotDot | QDir::AllEntries);
     fileModel->setRootPath(rootPath);
+
+    QSize grid_size(100,100);
+    QSize icon_size(64,64);
     QModelIndex findex = fileModel->index(rootPath);
     ui->filesView->setModel(fileModel);
+
+    ui->filesView->setViewMode(QListView::IconMode);
+    ui->filesView->setGridSize(grid_size);
+    ui->filesView->setResizeMode(QListView::Adjust);
+    ui->filesView->setIconSize(icon_size);
     ui->filesView->setRootIndex(findex);
 
 }
@@ -46,3 +54,4 @@ void MainWindow::on_filesView_doubleClicked(const QModelIndex &index)
     QString path = fileModel->fileInfo(index).absoluteFilePath();
     ui->filesView->setRootIndex(fileModel->setRootPath(path));
 }
+
