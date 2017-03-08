@@ -21,6 +21,8 @@ private slots:
 
     void on_filesView_doubleClicked(const QModelIndex &index);
 
+    void on_searchBar_textChanged(const QString &arg1);
+
 private:
     Ui::MainWindow *ui;
     QFileSystemModel* dirModel;

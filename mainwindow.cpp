@@ -25,6 +25,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     fileModel->setFilter(QDir::NoDotAndDotDot | QDir::AllEntries);
     fileModel->setRootPath(rootPath);
+    fileModel->setNameFilterDisables(false);
 
     QSize grid_size(100,100);
     QSize icon_size(64,64);
@@ -64,3 +65,12 @@ void MainWindow::on_filesView_doubleClicked(const QModelIndex &index)
     }
 }
 
+
+void MainWindow::on_searchBar_textChanged(const QString &arg1)
+{
+    QStringList keywords;
+    fileModel->setNameFilters(keywords);
+    if (arg1!="")
+        keywords << "*"+arg1+"*";
+    fileModel->setNameFilters(keywords);
+}
