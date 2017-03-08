@@ -16,41 +16,48 @@
   <widget class="QWidget" name="centralWidget">
    <layout class="QVBoxLayout" name="verticalLayout_2">
     <item>
-     <layout class="QHBoxLayout" name="horizontalLayout">
+     <layout class="QHBoxLayout" name="searchLayout">
       <item>
-       <widget class="QPushButton" name="pushButton_2">
-        <property name="maximumSize">
-         <size>
-          <width>167756</width>
-          <height>16777215</height>
-         </size>
+       <layout class="QHBoxLayout" name="buttonsLayout">
+        <property name="spacing">
+         <number>0</number>
         </property>
-        <property name="text">
-         <string>PushButton</string>
-        </property>
-       </widget>
+        <item>
+         <widget class="QPushButton" name="backButton">
+          <property name="maximumSize">
+           <size>
+            <width>20</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <property name="text">
+           <string>&lt;</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="forwardButton">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>20</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <property name="text">
+           <string>&gt;</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
       </item>
       <item>
-       <widget class="QPushButton" name="pushButton">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="maximumSize">
-         <size>
-          <width>100</width>
-          <height>16777215</height>
-         </size>
-        </property>
-        <property name="text">
-         <string>PushButton</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QLineEdit" name="lineEdit">
+       <widget class="QLineEdit" name="searchBar">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
           <horstretch>0</horstretch>
@@ -62,11 +69,17 @@
      </layout>
     </item>
     <item>
-     <layout class="QHBoxLayout" name="horizontalLayout_2">
+     <layout class="QHBoxLayout" name="mainLayout">
+      <property name="spacing">
+       <number>0</number>
+      </property>
       <item>
-       <layout class="QVBoxLayout" name="verticalLayout_3">
+       <layout class="QVBoxLayout" name="leftLayout">
+        <property name="spacing">
+         <number>0</number>
+        </property>
         <item>
-         <widget class="QListView" name="listView_2">
+         <widget class="QListView" name="tagView">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
             <horstretch>0</horstretch>
@@ -76,7 +89,7 @@
          </widget>
         </item>
         <item>
-         <widget class="QTreeView" name="treeView">
+         <widget class="QTreeView" name="dirView">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
             <horstretch>0</horstretch>
@@ -88,7 +101,7 @@
        </layout>
       </item>
       <item>
-       <widget class="QListView" name="listView">
+       <widget class="QListView" name="filesView">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
           <horstretch>0</horstretch>
