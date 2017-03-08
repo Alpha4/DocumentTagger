@@ -82,9 +82,15 @@
          <widget class="QListView" name="tagView">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-            <horstretch>0</horstretch>
+            <horstretch>2</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>100</width>
+            <height>16777215</height>
+           </size>
           </property>
          </widget>
         </item>
@@ -92,9 +98,15 @@
          <widget class="QTreeView" name="dirView">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-            <horstretch>0</horstretch>
-            <verstretch>1</verstretch>
+            <horstretch>2</horstretch>
+            <verstretch>2</verstretch>
            </sizepolicy>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>100</width>
+            <height>16777215</height>
+           </size>
           </property>
          </widget>
         </item>
@@ -104,7 +116,7 @@
        <widget class="QListView" name="filesView">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-          <horstretch>0</horstretch>
+          <horstretch>2</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
