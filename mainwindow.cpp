@@ -36,6 +36,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->filesView->setIconSize(icon_size);
     ui->filesView->setRootIndex(findex);
 
+    //ui->filesView->setItemDelegate();
 }
 
 MainWindow::~MainWindow()
