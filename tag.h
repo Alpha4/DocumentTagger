@@ -8,9 +8,8 @@
 class Tag
 {
 public:
-    Tag(TagGroup& parent);
-    Tag(TagGroup& parent, QString name);
     Tag(TagGroup &parent, QString name, QColor& color);
+
     void setColor(QColor& color);
     QColor& getColor();
     void setName(QString name);
@@ -19,8 +18,8 @@ public:
     TagGroup& getParent();
 
 private:
-    QString name;
     TagGroup& parent;
+    QString name;
     QColor& color;
 };
 
