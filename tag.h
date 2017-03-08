@@ -5,22 +5,23 @@
 #include <QColor>
 #include "taggroup.h"
 
+class TagGroup;
 class Tag
 {
 public:
-    Tag(TagGroup &parent, QString name, QColor& color);
+    Tag(TagGroup* parent, QString name, QColor* color);
 
-    void setColor(QColor& color);
-    QColor& getColor();
+    void setColor(QColor* color);
+    QColor* getColor();
     void setName(QString name);
     QString getName();
-    void setParent(TagGroup& parent);
-    TagGroup& getParent();
+    void setParent(TagGroup* parent);
+    TagGroup* getParent();
 
 private:
-    TagGroup& parent;
+    TagGroup* parent;
     QString name;
-    QColor& color;
+    QColor* color;
 };
 
 #endif // TAG_H
