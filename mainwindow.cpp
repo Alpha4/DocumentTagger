@@ -11,19 +11,38 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
     dirModel = new QFileSystemModel(this);
     fileModel = new QFileSystemModel(this);
-    //std::cout<<QDir::homePath().toStdString()<<std::endl;
+    //set dirModel to dirView
     QString rootPath = QDir::homePath();
     dirModel->setRootPath(rootPath);
     dirModel->setFilter(QDir::NoDotAndDotDot | QDir::AllDirs);
     QModelIndex index = dirModel->index(rootPath);
     ui->dirView->setModel(dirModel);
     ui->dirView->setRootIndex(index);
-    ui->dirView->hideColumn(1);
-    ui->dirView->hideColumn(2);
-    ui->dirView->hideColumn(3);
+    ui->dirView->hideColumn(1);//hide size
+    ui->dirView->hideColumn(2);//hide type
+    ui->dirView->hideColumn(3);//hide date modif
+
+    fileModel->setFilter(QDir::NoDotAndDotDot | QDir::AllEntries);
+    fileModel->setRootPath(rootPath);
+    QModelIndex findex = fileModel->index(rootPath);
+    ui->filesView->setModel(fileModel);
+    ui->filesView->setRootIndex(findex);
+
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
+}
+
+void MainWindow::on_dirView_clicked(const QModelIndex &index)
+{
+    QString path = dirModel->fileInfo(index).absoluteFilePath();
+    ui->filesView->setRootIndex(fileModel->setRootPath(path));
+}
+
+void MainWindow::on_filesView_doubleClicked(const QModelIndex &index)
+{
+    QString path = fileModel->fileInfo(index).absoluteFilePath();
+    ui->filesView->setRootIndex(fileModel->setRootPath(path));
 }

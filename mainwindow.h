@@ -16,6 +16,11 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
+private slots:
+    void on_dirView_clicked(const QModelIndex &index);
+
+    void on_filesView_doubleClicked(const QModelIndex &index);
+
 private:
     Ui::MainWindow *ui;
     QFileSystemModel* dirModel;
