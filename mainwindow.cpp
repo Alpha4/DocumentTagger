@@ -4,6 +4,7 @@
 #include <QDesktopServices>
 #include <QUrl>
 #include <iostream>
+#include <tagitemdelegate.h>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -12,6 +13,8 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
     dirModel = new QFileSystemModel(this);
     fileModel = new QFileSystemModel(this);
+    history = new PathHistory();
+
     //set dirModel to dirView
     QString rootPath = QDir::homePath();
     dirModel->setRootPath(rootPath);
@@ -26,17 +29,20 @@ MainWindow::MainWindow(QWidget *parent) :
     fileModel->setFilter(QDir::NoDotAndDotDot | QDir::AllEntries);
     fileModel->setRootPath(rootPath);
     fileModel->setNameFilterDisables(false);
+    history->add(rootPath);
 
     QSize grid_size(100,100);
     QSize icon_size(64,64);
     QModelIndex findex = fileModel->index(rootPath);
     ui->filesView->setModel(fileModel);
+    ui->filesView->setItemDelegate(new TagItemDelegate());
 
     ui->filesView->setViewMode(QListView::IconMode);
     ui->filesView->setGridSize(grid_size);
     ui->filesView->setResizeMode(QListView::Adjust);
     ui->filesView->setIconSize(icon_size);
     ui->filesView->setRootIndex(findex);
+
 }
 
 MainWindow::~MainWindow()
@@ -48,6 +54,7 @@ void MainWindow::on_dirView_clicked(const QModelIndex &index)
 {
     QString path = dirModel->fileInfo(index).absoluteFilePath();
     ui->filesView->setRootIndex(fileModel->setRootPath(path));
+    history->add(path);
 }
 
 void MainWindow::on_filesView_doubleClicked(const QModelIndex &index)
@@ -56,9 +63,10 @@ void MainWindow::on_filesView_doubleClicked(const QModelIndex &index)
 
     if (file.isDir() && !file.absoluteFilePath().contains(".app",Qt::CaseInsensitive)) {
         ui->filesView->setRootIndex(fileModel->setRootPath(file.absoluteFilePath()));
+        history->add(file.absoluteFilePath());
     } else if (file.isSymLink()) {
-      std::cout << file.symLinkTarget().toStdString() << std::endl;
-      ui->filesView->setRootIndex(fileModel->setRootPath(file.symLinkTarget()));
+        ui->filesView->setRootIndex(fileModel->setRootPath(file.symLinkTarget()));
+        history->add(file.symLinkTarget());
     } else {
         QString fileUrl = "file://"+file.absoluteFilePath();
         std::cout << QDesktopServices::openUrl(QUrl(fileUrl)) << std::endl;
@@ -73,4 +81,14 @@ void MainWindow::on_searchBar_textChanged(const QString &arg1)
     if (arg1!="")
         keywords << "*"+arg1+"*";
     fileModel->setNameFilters(keywords);
+}
+
+void MainWindow::on_backButton_clicked()
+{
+    ui->filesView->setRootIndex((fileModel->setRootPath(history->back())));
+}
+
+void MainWindow::on_forwardButton_clicked()
+{
+    ui->filesView->setRootIndex((fileModel->setRootPath(history->next())));
 }
