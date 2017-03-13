@@ -20,8 +20,8 @@ public:
 private:
     QFile* tagFile;
     QFile* tagGroupFile;
-    QHash<QString,TagGroup>* tagGroupHash;
-    QHash<Tag,QList<QFile*>>* tagHash;
+    QHash<QString,TagGroup> tagGroupHash;
+    QHash<Tag,QList<QFile*>> tagHash;
 };
 
 #endif // TAGMANAGER_H

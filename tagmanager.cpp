@@ -1,4 +1,5 @@
 #include "tagmanager.h"
+#include <iostream>
 #include <QTextStream>
 #include <QList>
 
@@ -7,15 +8,19 @@ TagManager::TagManager(QFile* tagFile, QFile* tagGroupFile)
 {
     this->tagFile = tagFile;
     this->tagGroupFile = tagGroupFile;
+    /*
     this->tagHash = new QHash<Tag,QList<QFile*>>();
-    this->tagGroupHash = new QHash<TagGroup>();
+    this->tagGroupHash = new QHash<QString,TagGroup>();
+    */
 }
 
 TagManager::~TagManager(){
     delete tagFile;
     delete tagGroupFile;
+    /*
     delete tagHash;
     delete tagGroupHash;
+    */
 }
 
 void TagManager::addFile(Tag tag,QFile* f){
@@ -27,7 +32,8 @@ void TagManager::removeFile(Tag tag, QFile *f){
 }
 
 void TagManager::addTag(Tag tag){
-    tagHash.insert(tag,new QList<QFile*>());
+    QList<QFile*> list();
+    tagHash.insert(tag,list);
 }
 
 void TagManager::removeTag(Tag tag){
@@ -36,9 +42,9 @@ void TagManager::removeTag(Tag tag){
 
 void TagManager::fillHashTable(){
     if(!tagGroupFile->open(QIODevice::ReadOnly)){
-        std::cout<<"error: "<<tagGroupFile->errorString()<<std::endl;
+        std::cout<<"error: "<<tagGroupFile->errorString().toStdString()<<std::endl;
     }
-    QTextStream in(&tagGroupFile);
+    QTextStream in(tagGroupFile);
 
     while(!in.atEnd()){
         QString tagGroupName = in.readLine();
@@ -49,9 +55,9 @@ void TagManager::fillHashTable(){
 
     //open the second file and read the tags
     if(!tagFile->open(QIODevice::ReadOnly)){
-        std::cout<<"error: "<<tagFile->errorString()<<std::endl;
+        std::cout<<"error: "<<tagFile->errorString().toStdString()<<std::endl;
     }
-    QTextStream iin(&tagFile);
+    QTextStream iin(tagFile);
     while(!iin.atEnd()){
         QString line = iin.readLine();
         QStringList fields = line.split(",");
@@ -61,9 +67,9 @@ void TagManager::fillHashTable(){
 
         QColor color(tagColor);
         TagGroup tagGroup = tagGroupHash[tagParent];
-        Tag tag(tagGroup,tagName,color);
+        Tag tag(&tagGroup,tagName,&color);
         QList<QFile*> listFiles();
-        tagHash->insert(tag,listFiles);
+        tagHash.insert(tag,listFiles);
         if(fields.size() > 2){
             for(int i=3; i<fields.size(); i++){
                 QFile* f = new QFile(fields[i]);
@@ -76,16 +82,16 @@ void TagManager::fillHashTable(){
 
 void TagManager::saveHashTable(){
     if(!tagGroupFile->open(QIODevice::Append)){
-        std::cout<<"error: "<<tagGroupFile->errorString()<<std::endl;
+        std::cout<<"error: "<<tagGroupFile->errorString().toStdString()<<std::endl;
     }
-    QTextStream outgf(&tagGroupFile);
+    QTextStream outgf(tagGroupFile);
 
     if(!tagFile->open(QIODevice::Append)){
-        std::cout<<"error: "<<tagFile->errorString()<<std::endl;
+        std::cout<<"error: "<<tagFile->errorString().toStdString()<<std::endl;
     }
-    QTextStream outf(&tagFile);
+    QTextStream outf(tagFile);
 
-    for(auto it = tagHash->begin();it != tagHash->end(); it++){
+    for(auto it = tagHash.begin();it != tagHash.end(); it++){
         QString line;
         line.append(it.key().getName());
         line.append(it.key().getColor()->name());
@@ -98,7 +104,7 @@ void TagManager::saveHashTable(){
     }
     tagFile->close();
 
-    for(auto it = tagGroupHash->begin(); it != tagGroupHash->end(); it++){
+    for(auto it = tagGroupHash.begin(); it != tagGroupHash.end(); it++){
         QString line;
         line.append(it.key());
         std::cout<<line.toStdString()<<std::endl;
