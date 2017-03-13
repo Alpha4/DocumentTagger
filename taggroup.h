@@ -18,6 +18,7 @@ public:
     Tag* getTagAtIndex(int index);
     int size();
     Tag* getTagByName(QString name);
+    QString getTagGroupName();
 
 private:
     QList<Tag> tagList;

@@ -38,3 +38,7 @@ Tag* TagGroup::getTagByName(QString name){
     }
     return nullptr;
 }
+
+QString TagGroup::getTagGroupName(){
+    return this->groupName;
+}
