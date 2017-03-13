@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QFileSystemModel>
+#include "pathhistory.h"
 
 namespace Ui {
 class MainWindow;
@@ -23,10 +24,15 @@ private slots:
 
     void on_searchBar_textChanged(const QString &arg1);
 
+    void on_backButton_clicked();
+
+    void on_forwardButton_clicked();
+
 private:
     Ui::MainWindow *ui;
     QFileSystemModel* dirModel;
     QFileSystemModel* fileModel;
+    PathHistory* history;
 };
 
 #endif // MAINWINDOW_H
