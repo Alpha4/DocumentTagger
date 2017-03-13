@@ -27,15 +27,15 @@ SOURCES += main.cpp\
         mainwindow.cpp \
     tag.cpp \
     taggroup.cpp \
-    tagmanager.cpp
-    pathhistory.cpp \
-    tagitemdelegate.cpp
+    tagmanager.cpp \
+    tagitemdelegate.cpp \
+    pathhistory.cpp
 
 HEADERS  += mainwindow.h \
     tag.h \
     taggroup.h \
-    tagmanager.h
-    pathhistory.h \
-    tagitemdelegate.h
+    tagmanager.h \
+    tagitemdelegate.h \
+    pathhistory.h
 
 FORMS    += mainwindow.ui
