@@ -32,7 +32,7 @@ void TagManager::removeFile(Tag tag, QFile *f){
 }
 
 void TagManager::addTag(Tag tag){
-    QList<QFile*> list();
+    QList<QFile*> list;
     tagHash.insert(tag,list);
 }
 
@@ -49,7 +49,7 @@ void TagManager::fillHashTable(){
     while(!in.atEnd()){
         QString tagGroupName = in.readLine();
         TagGroup tagGroup(tagGroupName);
-        tagGroupHash->insert(tagGroupName,tagGroup);
+        tagGroupHash.insert(tagGroupName,tagGroup);
     }
     tagGroupFile->close();
 
@@ -68,7 +68,7 @@ void TagManager::fillHashTable(){
         QColor color(tagColor);
         TagGroup tagGroup = tagGroupHash[tagParent];
         Tag tag(&tagGroup,tagName,&color);
-        QList<QFile*> listFiles();
+        QList<QFile*> listFiles;
         tagHash.insert(tag,listFiles);
         if(fields.size() > 2){
             for(int i=3; i<fields.size(); i++){
@@ -100,7 +100,7 @@ void TagManager::saveHashTable(){
             line.append(it->at(i)->fileName());
         }
         std::cout<<line.toStdString()<<std::endl;
-        outf<<line.toStdString()<<std::endl;
+        outf<<line<<endl;
     }
     tagFile->close();
 
@@ -108,7 +108,7 @@ void TagManager::saveHashTable(){
         QString line;
         line.append(it.key());
         std::cout<<line.toStdString()<<std::endl;
-        outgf<<line.toStdString()<<std::endl;
+        outgf<<line<<endl;
     }
     tagGroupFile->close();
 }

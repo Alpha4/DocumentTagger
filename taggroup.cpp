@@ -1,5 +1,10 @@
 #include "taggroup.h"
 
+TagGroup::TagGroup()
+{
+    groupName = "Default";
+}
+
 TagGroup::TagGroup(QString groupName): groupName(groupName)
 {
 
@@ -39,6 +44,7 @@ Tag* TagGroup::getTagByName(QString name){
     return nullptr;
 }
 
-QString TagGroup::getTagGroupName(){
+QString TagGroup::getTagGroupName() const{
     return this->groupName;
 }
+

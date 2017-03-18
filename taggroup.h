@@ -10,6 +10,7 @@ class Tag;
 class TagGroup
 {
 public:
+    TagGroup();
     TagGroup(QString groupName);
     QList<Tag> getTagList();
     void insertTag(Tag tag);
@@ -18,7 +19,7 @@ public:
     Tag* getTagAtIndex(int index);
     int size();
     Tag* getTagByName(QString name);
-    QString getTagGroupName();
+    QString getTagGroupName() const;
 
 private:
     QList<Tag> tagList;
