@@ -3,8 +3,11 @@
 
 #include <QDesktopServices>
 #include <QUrl>
+#include <QFile>
 #include <iostream>
 #include <tagitemdelegate.h>
+#include "tagviewdelegate.h"
+#include "tagmanager.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -43,6 +46,14 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->filesView->setIconSize(icon_size);
     ui->filesView->setRootIndex(findex);
 
+    QFile* tagGroupFile = new QFile("/home/andrei/Documents/Work/qt/DocumentTagger/tagGroups.txt");
+    QFile* tagFile = new QFile("/home/andrei/Documents/Work/qt/DocumentTagger/tags.txt");
+    TagManager* tagManager = new TagManager(tagFile,tagGroupFile);
+    tagManager->fillHashTable();
+    QStandardItemModel* model = tagManager->createModel();
+
+    ui->tagView->setModel(model);
+    ui->tagView->setItemDelegate(new TagViewDelegate(this));
 }
 
 MainWindow::~MainWindow()
@@ -91,4 +102,15 @@ void MainWindow::on_backButton_clicked()
 void MainWindow::on_forwardButton_clicked()
 {
     ui->filesView->setRootIndex((fileModel->setRootPath(history->next())));
+}
+
+void MainWindow::on_tagView_clicked(const QModelIndex &index)
+{
+    std::cout<<index.column()<<std::endl;
+    std::cout<<index.row()<<std::endl;
+    if(index.parent().data().isNull()){
+        std::cout<<"root"<<std::endl;
+    }else{
+        std::cout<<index.parent().data().toString().toStdString()<<std::endl;
+    }
 }

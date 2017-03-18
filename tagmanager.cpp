@@ -112,3 +112,47 @@ void TagManager::saveHashTable(){
     }
     tagGroupFile->close();
 }
+
+QList<Tag> TagManager::getKeys()
+{
+    return this->tagHash.keys();
+}
+
+QList<QString> TagManager::getTagGroupKeys(){
+    return this->tagGroupHash.keys();
+}
+
+QStandardItemModel* TagManager::createModel()
+{
+    QStandardItemModel* model = new QStandardItemModel();
+    QStandardItem* parentItem = model->invisibleRootItem();
+    QList<QString> keys = getTagGroupKeys();
+    //construct the first nodes corresponding to groups
+    for(int i = 0; i< keys.size(); i++){
+        QStandardItem* item = new QStandardItem(keys[i]);
+        parentItem->appendRow(item);
+    }
+    //go through each tag and insert it in the correct taggroup
+    QList<Tag> tkeys = getKeys();
+    int children = parentItem->rowCount();
+    for(int i = 0; i<tkeys.size(); i++){
+        QStandardItem* actualParent = NULL;
+        for(int j = 0; j< children; j++){
+            if(parentItem->child(j)->text() == tkeys[i].getParent()->getTagGroupName()){
+                actualParent = parentItem->child(j);
+                break;
+            }
+        }
+        QStandardItem* item = new QStandardItem(tkeys[i].getName());
+        /*
+        QColor col(112,121,11);
+        QBrush brush(col);
+        item->setBackground(brush);
+        */
+        actualParent->appendRow(item);
+    }
+    return model;
+}
+
+
+

@@ -1,6 +1,7 @@
 #include "tagitemdelegate.h"
 #include <QStyledItemDelegate>
 
+/*
 void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const override {
     if (index.data().canConvert<StarRating>()) {
         Tag tag = qvariant_cast<Tag>(index.data());
@@ -23,3 +24,4 @@ void setEditorData(QWidget *editor, const QModelIndex &index) const override {
 void setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const override {
 
 }
+*/

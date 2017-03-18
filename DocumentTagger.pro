@@ -29,13 +29,19 @@ SOURCES += main.cpp\
     taggroup.cpp \
     tagmanager.cpp \
     tagitemdelegate.cpp \
-    pathhistory.cpp
+    pathhistory.cpp \
+    tagviewdelegate.cpp
 
 HEADERS  += mainwindow.h \
     tag.h \
     taggroup.h \
     tagmanager.h \
     tagitemdelegate.h \
-    pathhistory.h
+    pathhistory.h \
+    tagviewdelegate.h
 
 FORMS    += mainwindow.ui
+
+DISTFILES += \
+    tagGroups.txt \
+    tags.txt

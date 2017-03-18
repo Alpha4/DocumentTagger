@@ -8,7 +8,7 @@ class TagItemDelegate : public QStyledItemDelegate
     Q_OBJECT
 
 public:
-    TagItemDelegate(QWidget *parent = 0) : QStyledItemDelegate(parent) {}
+    /*TagItemDelegate(QWidget *parent = 0) : QStyledItemDelegate(parent) {}
 
     void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const override;
     QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const override;
@@ -18,6 +18,7 @@ public:
 
 private slots:
     void commitAndCloseEditor();
+    */
 };
 
 #endif // TAGITEMDELEGATE_H

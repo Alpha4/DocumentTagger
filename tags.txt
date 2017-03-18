@@ -1,0 +1,1 @@
+bestTag,red,default,txcd.ghs,test.tex

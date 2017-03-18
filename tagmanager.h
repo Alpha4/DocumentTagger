@@ -4,6 +4,7 @@
 #include <QFile>
 #include <QList>
 #include <QHash>
+#include <QStandardItemModel>
 #include "tag.h"
 
 class TagManager
@@ -17,6 +18,10 @@ public:
     void removeTag(Tag tag);
     void fillHashTable();
     void saveHashTable();
+    QList<Tag> getKeys();
+    QList<QString> getTagGroupKeys();
+    QStandardItemModel* createModel();
+
 private:
     QFile* tagFile;
     QFile* tagGroupFile;

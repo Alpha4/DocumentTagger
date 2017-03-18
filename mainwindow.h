@@ -28,6 +28,8 @@ private slots:
 
     void on_forwardButton_clicked();
 
+    void on_tagView_clicked(const QModelIndex &index);
+
 private:
     Ui::MainWindow *ui;
     QFileSystemModel* dirModel;
