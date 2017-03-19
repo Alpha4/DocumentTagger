@@ -14,13 +14,16 @@ public:
     ~TagManager();
     void addFile(Tag tag,QFile* f);
     void removeFile(Tag tag,QFile* f);
-    void addTag(Tag tag);
+
     void removeTag(Tag tag);
     void fillHashTable();
     void saveHashTable();
     QList<Tag> getKeys();
     QList<QString> getTagGroupKeys();
     QStandardItemModel* createModel();
+
+public slots:
+    void addTag(Tag tag);
 
 private:
     QFile* tagFile;

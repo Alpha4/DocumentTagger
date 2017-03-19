@@ -30,7 +30,8 @@ SOURCES += main.cpp\
     tagmanager.cpp \
     tagitemdelegate.cpp \
     pathhistory.cpp \
-    tagviewdelegate.cpp
+    tagviewdelegate.cpp \
+    newtagframe.cpp
 
 HEADERS  += mainwindow.h \
     tag.h \
@@ -38,7 +39,8 @@ HEADERS  += mainwindow.h \
     tagmanager.h \
     tagitemdelegate.h \
     pathhistory.h \
-    tagviewdelegate.h
+    tagviewdelegate.h \
+    newtagframe.h
 
 FORMS    += mainwindow.ui
 

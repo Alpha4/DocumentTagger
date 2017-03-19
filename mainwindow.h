@@ -4,8 +4,12 @@
 #include <QMainWindow>
 #include <QFileSystemModel>
 #include <QStandardItemModel>
+#include <QFrame>
+#include <QLineEdit>
+#include <QListView>
 #include "pathhistory.h"
 #include "tagmanager.h"
+#include "newtagframe.h"
 
 namespace Ui {
 class MainWindow;
@@ -41,6 +45,7 @@ private:
     PathHistory* history;
     TagManager* tagManager;
     QStandardItemModel* model;
+
 };
 
 #endif // MAINWINDOW_H

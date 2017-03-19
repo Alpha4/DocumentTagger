@@ -68,8 +68,15 @@ MainWindow::~MainWindow()
 }
 
 void MainWindow::handleClick(){
+    QRect rect = this->rect();
+    NewTagFrame* popup = new NewTagFrame(model,&rect,this);
+    popup->show();
+}
 
-    QFrame* popup1 = new QFrame(this, Qt::Popup | Qt::Window );
+/*
+void MainWindow::handleClick(){
+
+    popup1 = new QFrame(this, Qt::Popup | Qt::Window );
 
     popup1->resize(300,400);
     QRect window = this->rect();
@@ -81,13 +88,13 @@ void MainWindow::handleClick(){
     QHBoxLayout* textLayout = new QHBoxLayout(popup1);
     QVBoxLayout* groupLayout = new QVBoxLayout(popup1);
 
-    QLineEdit *tmpE = new QLineEdit( popup1 );
+    tmpE = new QLineEdit( popup1 );
     QLabel* textLabel = new QLabel("Enter Tag Name: ");
     textLayout->insertWidget(0,textLabel);
     textLayout->insertWidget(1,tmpE);
 
     QPushButton* confirm = new QPushButton("OK",popup1);
-    QListView* groups = new QListView(popup1);
+    groups = new QListView(popup1);
     groups->setModel(model);
     groups->setViewMode(QListView::IconMode);
     QLabel* groupLabel = new QLabel("Choose a group: ");
@@ -99,13 +106,13 @@ void MainWindow::handleClick(){
     dialogLayout->insertLayout(1,textLayout);
     dialogLayout->insertLayout(2,groupLayout);
     dialogLayout->insertWidget(3,confirm);
-    connect(confirm,SIGNAL(clicked(bool)),popup1,SLOT(hide()));
+    connect(confirm,SIGNAL(clicked(bool)),popup1,SLOT(this->buildTag()));
     //connect( tmpE, SIGNAL( returnPressed() ), popup1, SLOT( hide() ) );
     tmpE->setGeometry(10,10, 130, 30);
     tmpE->setFocus();
     popup1->show();
-
 }
+*/
 
 void MainWindow::on_dirView_clicked(const QModelIndex &index)
 {
