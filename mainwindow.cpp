@@ -4,6 +4,7 @@
 #include <QDesktopServices>
 #include <QUrl>
 #include <QFile>
+#include <QLabel>
 #include <iostream>
 #include <tagitemdelegate.h>
 #include "tagviewdelegate.h"
@@ -48,17 +49,62 @@ MainWindow::MainWindow(QWidget *parent) :
 
     QFile* tagGroupFile = new QFile("/home/andrei/Documents/Work/qt/DocumentTagger/tagGroups.txt");
     QFile* tagFile = new QFile("/home/andrei/Documents/Work/qt/DocumentTagger/tags.txt");
-    TagManager* tagManager = new TagManager(tagFile,tagGroupFile);
+    tagManager = new TagManager(tagFile,tagGroupFile);
     tagManager->fillHashTable();
-    QStandardItemModel* model = tagManager->createModel();
+    model = tagManager->createModel();
 
     ui->tagView->setModel(model);
     ui->tagView->setItemDelegate(new TagViewDelegate(this));
+
+    QPushButton* createTagButton = new QPushButton("New Tag");
+    ui->leftSplitter->insertWidget(0,createTagButton);
+    connect(createTagButton,SIGNAL(clicked(bool)),this,SLOT(handleClick()));
+
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
+}
+
+void MainWindow::handleClick(){
+
+    QFrame* popup1 = new QFrame(this, Qt::Popup | Qt::Window );
+
+    popup1->resize(300,400);
+    QRect window = this->rect();
+    QPoint middleWindow(window.x()+window.width()/2 - 150,window.y()+window.height()/2 - 200);
+    popup1->move( mapToGlobal( middleWindow ) );
+    QLabel* dialogLabel = new QLabel("New Tag Box");
+    dialogLabel->setAlignment(Qt::AlignCenter);
+    QVBoxLayout* dialogLayout = new QVBoxLayout(popup1);
+    QHBoxLayout* textLayout = new QHBoxLayout(popup1);
+    QVBoxLayout* groupLayout = new QVBoxLayout(popup1);
+
+    QLineEdit *tmpE = new QLineEdit( popup1 );
+    QLabel* textLabel = new QLabel("Enter Tag Name: ");
+    textLayout->insertWidget(0,textLabel);
+    textLayout->insertWidget(1,tmpE);
+
+    QPushButton* confirm = new QPushButton("OK",popup1);
+    QListView* groups = new QListView(popup1);
+    groups->setModel(model);
+    groups->setViewMode(QListView::IconMode);
+    QLabel* groupLabel = new QLabel("Choose a group: ");
+    groupLayout->insertWidget(0,groupLabel);
+    groupLayout->insertWidget(1,groups);
+
+
+    dialogLayout->insertWidget(0,dialogLabel);
+    dialogLayout->insertLayout(1,textLayout);
+    dialogLayout->insertLayout(2,groupLayout);
+    dialogLayout->insertWidget(3,confirm);
+    connect(confirm,SIGNAL(clicked(bool)),popup1,SLOT(hide()));
+    //connect( tmpE, SIGNAL( returnPressed() ), popup1, SLOT( hide() ) );
+    tmpE->setGeometry(10,10, 130, 30);
+    tmpE->setFocus();
+    popup1->show();
+
 }
 
 void MainWindow::on_dirView_clicked(const QModelIndex &index)

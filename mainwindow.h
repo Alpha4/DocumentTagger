@@ -3,7 +3,9 @@
 
 #include <QMainWindow>
 #include <QFileSystemModel>
+#include <QStandardItemModel>
 #include "pathhistory.h"
+#include "tagmanager.h"
 
 namespace Ui {
 class MainWindow;
@@ -30,11 +32,15 @@ private slots:
 
     void on_tagView_clicked(const QModelIndex &index);
 
+    void handleClick();
+
 private:
     Ui::MainWindow *ui;
     QFileSystemModel* dirModel;
     QFileSystemModel* fileModel;
     PathHistory* history;
+    TagManager* tagManager;
+    QStandardItemModel* model;
 };
 
 #endif // MAINWINDOW_H
