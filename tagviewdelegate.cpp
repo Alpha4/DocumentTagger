@@ -1,21 +1,40 @@
 #include "tagviewdelegate.h"
 #include <QPainter>
+#include <QPen>
+#include <QList>
 #include <QApplication>
+#include <iostream>
 
-TagViewDelegate::TagViewDelegate(QWidget *parent):QStyledItemDelegate(parent)
+TagViewDelegate::TagViewDelegate(TagManager* tm,
+                                 QWidget *parent):
+    QStyledItemDelegate(parent),
+    tagManager(tm)
 {
 
 }
 
 void TagViewDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
-    QFontMetrics fm(QApplication::font());
     if(!index.parent().data().isNull()){
-        painter->setPen(QPen(Qt::red,2));
-        QString text = index.data().toString();
-        int textlen = fm.width(text);
-
-        painter->drawRect(option.rect.x()+1,option.rect.y(),option.rect.y() +textlen,option.rect.height());
+        QString d = index.data().toString();
+        QString groupName = index.parent().data().toString();
+        //TagGroup* tgroup = tagManager->getTagGroup(groupName);
+        QList<Tag> tags = tagManager->getKeys();
+        //Tag* thisTag = NULL;
+        for(int i = 0; i<tags.size(); i++){
+            if(tags[i].getName() == d && tags[i].getParent()->getTagGroupName() == groupName){
+                //thisTag = &tags[i];
+                painter->setPen(QPen(*tags[i].getColor()));
+                painter->drawRect(option.rect.x()+1,option.rect.y(),option.rect.width(),option.rect.height());
+                break;
+            }
+        }
+        /*
+        QColor* color = thisTag->getColor();
+        std::cout<<"color finale: "<<color->name().toStdString()<<std::endl;
+        painter->setPen(QPen(*color,2));
+        painter->drawRect(option.rect.x()+1,option.rect.y(),option.rect.width(),option.rect.height());
+        */
     }
     QStyledItemDelegate::paint(painter,option, index);
 }

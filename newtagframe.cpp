@@ -49,6 +49,7 @@ NewTagFrame::NewTagFrame(QStandardItemModel* model,
     red = new QPushButton(this);
     red->setPalette(QPalette(Qt::red));
     red->autoFillBackground();
+    red->setText("X");
     blue = new QPushButton(this);
     blue->setPalette(QPalette(Qt::blue));
     blue->autoFillBackground();
@@ -83,7 +84,8 @@ NewTagFrame::NewTagFrame(QStandardItemModel* model,
     //colorLayout->insertWidget(1,colorButton);
     //colorLayout->insertWidget(0,bg);
 
-    QPushButton* confirm = new QPushButton("OK",this);
+    confirm = new QPushButton("OK",this);
+    confirm->setDisabled(1);
     groups = new QListView(this);
     groups->setModel(model);
     groups->setViewMode(QListView::IconMode);
@@ -104,6 +106,7 @@ NewTagFrame::NewTagFrame(QStandardItemModel* model,
     tmpE->setGeometry(10,10, 130, 30);
     tmpE->setFocus();
 
+    connect(tmpE,SIGNAL(textChanged(QString)),this,SLOT(checkEmpty(QString)));
     connect(confirm,SIGNAL(clicked(bool)),this,SLOT(buildTag()));
     connect(groups,SIGNAL(clicked(QModelIndex)),this,SLOT(disableNewGroup(QModelIndex)));
     connect(pbutton,SIGNAL(clicked(bool)),this,SLOT(enableNewGroup()));
@@ -113,7 +116,16 @@ NewTagFrame::NewTagFrame(QStandardItemModel* model,
     connect(yellow,SIGNAL(clicked(bool)),this,SLOT(setYellow()));
     connect(gray,SIGNAL(clicked(bool)),this,SLOT(setGray()));
     connect(cyan,SIGNAL(clicked(bool)),this,SLOT(setCyan()));
+    connect(this,SIGNAL(end()),this,SLOT(saveModel()));
 }
+
+void NewTagFrame::saveModel(){
+    tagManager->saveHashTable();
+    this->hide();
+}
+
+
+
 
 void NewTagFrame::setRed(){
     color = new QColor(Qt::red);
@@ -174,21 +186,15 @@ void NewTagFrame::setGray(){
     gray->setText("X");
 }
 
-
-/*
-void NewTagFrame::setColor()
-{
-    QColor color;
-    color = QColorDialog::getColor(Qt::green, this);
-    //color = QColorDialog::getColor(Qt::green, this, "Select Color", QColorDialog::DontUseNativeDialog);
-
-    if (color.isValid()) {
-        colorLabel->setText(color.name());
-        colorLabel->setPalette(QPalette(color));
-        colorLabel->setAutoFillBackground(true);
+void NewTagFrame::checkEmpty(QString str){
+    std::cout<<"checkEmpty string"<<std::endl;
+    if(str==""){
+        confirm->setDisabled(1);
+    }else{
+        confirm->setEnabled(1);
     }
 }
-*/
+
 
 void NewTagFrame::enableNewGroup(){
     groups->clearSelection();
@@ -207,14 +213,74 @@ void NewTagFrame::buildTag()
     QString tagGroupName;
     QModelIndexList selected = groups->selectionModel()->selectedIndexes();
     if(selected.isEmpty()){
-        //std::cout<<"No group selected"<<std::endl;
+        std::cout<<"No group selected"<<std::endl;
         tagGroupName = grName->text();
+        std::cout<<tagGroupName.toStdString()<<std::endl;
+        if(tagGroupName == "") tagGroupName = "default";
+        //create a new taggroup
+        TagGroup* taggroup = new TagGroup(tagGroupName);
+        std::cout<<"before inserting the taggroup"<<std::endl;
+        tagManager->insertTagGroup(taggroup);
+        std::cout<<"after inserting the taggroup"<<std::endl;
+        Tag* tag = new Tag(taggroup,name,color);
+        tagManager->addTag(*tag);
+        std::cout<<"after adding the tag"<<std::endl;
+
+        QStandardItem* group = new QStandardItem(tagGroupName);
+        QStandardItem* parent =model->invisibleRootItem();
+        parent->appendRow(group);
+        std::cout<<"after changing the group in the model"<<std::endl;
+
+        int children = parent->rowCount();
+        std::cout<<"children = "<<children<<std::endl;
+        QStandardItem* actualParent = NULL;
+        for(int j = 0; j< children; j++){
+            if(parent->child(j)->text() == tagGroupName){
+                std::cout<<"we found the parent of the tag"<<std::endl;
+                actualParent = parent->child(j);
+                break;
+            }
+        }
+        QStandardItem* item = new QStandardItem(name);
+        actualParent->appendRow(item);
+        std::cout<<"just before emit end()"<<std::endl;
+        emit end();
+
     }else{
         tagGroupName = selected[0].data().toString();
         //std::cout<<"selected: "<<gr.toStdString()<<std::endl;
+        QList<QString> keys = tagManager->getTagGroupKeys();
+        TagGroup* tg = NULL;
+        for(int i = 0; i< keys.size(); i++){
+            if(keys[i] == tagGroupName){
+                tg = tagManager->getTagGroup(tagGroupName);
+                break;
+            }
+        }
+        if(tg == NULL){
+            std::cerr<<"can not find tag"<<std::endl;
+        }
+        Tag* tag = new Tag(tg,name,color);
+        tagManager->addTag(*tag);
+
+        QStandardItem* parent =model->invisibleRootItem();
+        int children = parent->rowCount();
+        QStandardItem* actualParent = NULL;
+        for(int j = 0; j< children; j++){
+            if(parent->child(j)->text() == tagGroupName){
+                actualParent = parent->child(j);
+                break;
+            }
+        }
+        QStandardItem* item = new QStandardItem(name);
+        actualParent->appendRow(item);
+
+        emit end();
+
+
     }
-    std::cout<<"hello"<<std::endl;
-    std::cout<<color->name().toStdString()<<std::endl;
+    //std::cout<<color->name().toStdString()<<std::endl;
+
 
 
 }

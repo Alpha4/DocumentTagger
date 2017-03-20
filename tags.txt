@@ -1,1 +1,1 @@
-bestTag,red,default,txcd.ghs,test.tex
+Plane,#0000ff,Travel

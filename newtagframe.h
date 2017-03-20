@@ -29,6 +29,12 @@ public slots:
     void setCyan();
     void setYellow();
     void setGray();
+    void checkEmpty(QString str);
+
+    void saveModel();
+signals:
+    void end();
+
 private:
     QStandardItemModel* model;
     QRect* window;
@@ -38,6 +44,7 @@ private:
     TagManager* tagManager;
     QColor* color;
     QPushButton *red,*blue,*green,*yellow,*cyan,*gray;
+    QPushButton* confirm;
 };
 
 #endif // NEWTAGFRAME_H

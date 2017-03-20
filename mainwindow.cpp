@@ -54,11 +54,13 @@ MainWindow::MainWindow(QWidget *parent) :
     model = tagManager->createModel();
 
     ui->tagView->setModel(model);
-    ui->tagView->setItemDelegate(new TagViewDelegate(this));
+    ui->tagView->setItemDelegate(new TagViewDelegate(tagManager,this));
 
     QPushButton* createTagButton = new QPushButton("New Tag");
     ui->leftSplitter->insertWidget(0,createTagButton);
     connect(createTagButton,SIGNAL(clicked(bool)),this,SLOT(handleClick()));
+    //connect(this,SIGNAL(destroyed(QObject*)),this,SLOT(saveModel()));
+
 
 }
 

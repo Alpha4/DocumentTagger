@@ -31,6 +31,17 @@ void TagManager::removeFile(Tag tag, QFile *f){
     tagHash[tag].removeOne(f);
 }
 
+TagGroup *TagManager::getTagGroup(QString groupName)
+{
+    return tagGroupHash[groupName];
+}
+
+void TagManager::insertTagGroup(TagGroup *tagGroup)
+{
+    QString name = tagGroup->getTagGroupName();
+    tagGroupHash.insert(name,tagGroup);
+}
+
 void TagManager::addTag(Tag tag){
     QList<QFile*> list;
     tagHash.insert(tag,list);
@@ -48,7 +59,7 @@ void TagManager::fillHashTable(){
 
     while(!in.atEnd()){
         QString tagGroupName = in.readLine();
-        TagGroup tagGroup(tagGroupName);
+        TagGroup* tagGroup = new TagGroup(tagGroupName);
         tagGroupHash.insert(tagGroupName,tagGroup);
     }
     tagGroupFile->close();
@@ -66,8 +77,10 @@ void TagManager::fillHashTable(){
         QString tagParent = fields[2];
 
         QColor color(tagColor);
-        TagGroup tagGroup = tagGroupHash[tagParent];
-        Tag tag(&tagGroup,tagName,&color);
+        std::cout<<"color = "<<color.name().toStdString()<<std::endl;
+        TagGroup* tagGroup = tagGroupHash[tagParent];
+        Tag tag(tagGroup,tagName,&color);
+        std::cout<<"color tag = "<<tag.getColor()->name().toStdString()<<std::endl;
         QList<QFile*> listFiles;
         tagHash.insert(tag,listFiles);
         if(fields.size() > 2){
@@ -81,28 +94,34 @@ void TagManager::fillHashTable(){
 }
 
 void TagManager::saveHashTable(){
-    if(!tagGroupFile->open(QIODevice::Append)){
+    if(!tagGroupFile->open(QIODevice::ReadWrite | QIODevice::Truncate | QIODevice::Text)){
         std::cout<<"error: "<<tagGroupFile->errorString().toStdString()<<std::endl;
     }
     QTextStream outgf(tagGroupFile);
 
-    if(!tagFile->open(QIODevice::Append)){
+    if(!tagFile->open(QIODevice::ReadWrite | QIODevice::Truncate | QIODevice::Text)){
         std::cout<<"error: "<<tagFile->errorString().toStdString()<<std::endl;
     }
     QTextStream outf(tagFile);
 
+    std::cout<<"size of taghash = "<<tagHash.size()<<std::endl;
     for(auto it = tagHash.begin();it != tagHash.end(); it++){
         QString line;
         line.append(it.key().getName());
+        line.append(",");
         line.append(it.key().getColor()->name());
+        std::cout<<it.key().getColor()->name().toStdString()<<std::endl;
+        line.append(",");
         line.append(it.key().getParent()->getTagGroupName());
         for(int i = 0; i < it->size(); i++){
+            line.append(",");
             line.append(it->at(i)->fileName());
         }
         std::cout<<line.toStdString()<<std::endl;
         outf<<line<<endl;
     }
     tagFile->close();
+    std::cout<<"after writing the tags"<<std::endl;
 
     for(auto it = tagGroupHash.begin(); it != tagGroupHash.end(); it++){
         QString line;
@@ -144,11 +163,6 @@ QStandardItemModel* TagManager::createModel()
             }
         }
         QStandardItem* item = new QStandardItem(tkeys[i].getName());
-        /*
-        QColor col(112,121,11);
-        QBrush brush(col);
-        item->setBackground(brush);
-        */
         actualParent->appendRow(item);
     }
     return model;
