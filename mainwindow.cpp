@@ -69,7 +69,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::handleClick(){
     QRect rect = this->rect();
-    NewTagFrame* popup = new NewTagFrame(model,&rect,this);
+    NewTagFrame* popup = new NewTagFrame(model,&rect,tagManager,this);
     popup->show();
 }
 
