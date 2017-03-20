@@ -24,17 +24,11 @@ void TagViewDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
         for(int i = 0; i<tags.size(); i++){
             if(tags[i].getName() == d && tags[i].getParent()->getTagGroupName() == groupName){
 
-                painter->setBackground(QBrush(*tags[i].getColor()));
+                painter->setBackground(QBrush(tags[i].getColor().light()));
                 painter->setBackgroundMode(Qt::OpaqueMode);
                 break;
             }
         }
-        /*
-        QColor* color = thisTag->getColor();
-        std::cout<<"color finale: "<<color->name().toStdString()<<std::endl;
-        painter->setPen(QPen(*color,2));
-        painter->drawRect(option.rect.x()+1,option.rect.y(),option.rect.width(),option.rect.height());
-        */
     }
     QStyledItemDelegate::paint(painter,option, index);
 }

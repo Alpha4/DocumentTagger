@@ -1,15 +1,15 @@
 #include "tag.h"
 
 
-Tag::Tag(TagGroup* parent, QString name, QColor *color):parent(parent), name(name), color(color){
+Tag::Tag(TagGroup* parent, QString name, QColor color):parent(parent), name(name), color(color){
 
 }
 
-QColor *Tag::getColor() const{
+QColor Tag::getColor() const{
     return this->color;
 }
 
-void Tag::setColor(QColor* color){
+void Tag::setColor(QColor color){
     this->color = color;
 }
 

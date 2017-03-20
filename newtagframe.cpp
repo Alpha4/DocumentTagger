@@ -22,8 +22,11 @@ NewTagFrame::NewTagFrame(QStandardItemModel* model,
     tagManager(tagManager)
 {
     this->resize(300,400);
-    QPoint middleWindow(window->x()+window->width()/2 - 150,window->y()+window->height()/2 - 200);
-    this->move( mapToParent( middleWindow ) );
+   // QPoint middleWindow(window->x()+window->width()/2 - 150,window->y()+window->height()/2 - 200);
+    //this->move( mapToParent( middleWindow ) );
+    this->move(parent->window()->frameGeometry().topLeft() +
+               parent->window()->rect().center() - rect().center());
+
     QLabel* dialogLabel = new QLabel("New Tag Box");
     dialogLabel->setAlignment(Qt::AlignCenter);
     QVBoxLayout* dialogLayout = new QVBoxLayout(this);
@@ -65,6 +68,8 @@ NewTagFrame::NewTagFrame(QStandardItemModel* model,
     cyan = new QPushButton(this);
     cyan->setPalette(QPalette(Qt::cyan));
     cyan->autoFillBackground();
+
+
 
     colorLayout->insertWidget(0,red);
     colorLayout->insertWidget(1,blue);
@@ -222,7 +227,7 @@ void NewTagFrame::buildTag()
         std::cout<<"before inserting the taggroup"<<std::endl;
         tagManager->insertTagGroup(taggroup);
         std::cout<<"after inserting the taggroup"<<std::endl;
-        Tag* tag = new Tag(taggroup,name,color);
+        Tag* tag = new Tag(taggroup,name,*color);
         tagManager->addTag(*tag);
         std::cout<<"after adding the tag"<<std::endl;
 
@@ -260,7 +265,7 @@ void NewTagFrame::buildTag()
         if(tg == NULL){
             std::cerr<<"can not find tag"<<std::endl;
         }
-        Tag* tag = new Tag(tg,name,color);
+        Tag* tag = new Tag(tg,name,*color);
         tagManager->addTag(*tag);
 
         QStandardItem* parent =model->invisibleRootItem();

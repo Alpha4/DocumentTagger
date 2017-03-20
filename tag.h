@@ -9,10 +9,10 @@ class TagGroup;
 class Tag
 {
 public:
-    Tag(TagGroup* parent, QString name, QColor* color);
+    Tag(TagGroup* parent, QString name, QColor color);
 
-    void setColor(QColor* color);
-    QColor* getColor() const;
+    void setColor(QColor color);
+    QColor getColor() const;
     void setName(QString name);
     QString getName() const;
     void setParent(TagGroup* parent);
@@ -22,7 +22,7 @@ public:
 private:
     TagGroup* parent;
     QString name;
-    QColor* color;
+    QColor color;
 };
 
 inline uint qHash(const Tag &tag, uint seed) {

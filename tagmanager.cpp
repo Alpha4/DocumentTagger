@@ -79,10 +79,12 @@ void TagManager::fillHashTable(){
         QString tagParent = fields[2];
 
         QColor color(tagColor);
-        std::cout<<"color = "<<color.name().toStdString()<<std::endl;
+        std::cout <<"color = " << tagColor.toStdString()<<std::endl;
+        std::cout <<"colorin Qcolor = "<<color.name().toStdString()<<std::endl;
         TagGroup* tagGroup = tagGroupHash[tagParent];
-        Tag tag(tagGroup,tagName,&color);
-        std::cout<<"color tag = "<<tag.getColor()->name().toStdString()<<std::endl;
+
+        Tag tag(tagGroup,tagName,color);
+        //std::cout<<"color tag = "<<tag.getColor()->name().toStdString()<<std::endl;
         QList<QString> listFiles;
         tagHash.insert(tag,listFiles);
         if(fields.size() > 2){
@@ -111,8 +113,8 @@ void TagManager::saveHashTable(){
         QString line;
         line.append(it.key().getName());
         line.append(",");
-        line.append(it.key().getColor()->name());
-        std::cout<<it.key().getColor()->name().toStdString()<<std::endl;
+        line.append(it.key().getColor().name());
+        //std::cout<<"SAVING color : "<<it.key().getColor()->name().toStdString()<<std::endl;
         line.append(",");
         line.append(it.key().getParent()->getTagGroupName());
         QList<QString> files = it.value();
