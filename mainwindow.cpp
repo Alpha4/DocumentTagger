@@ -57,6 +57,11 @@ MainWindow::MainWindow(QWidget *parent) :
 
     ui->tagView->setModel(model);
     ui->tagView->setItemDelegate(new TagViewDelegate(tagManager,this));
+    ui->tagView->setContextMenuPolicy(Qt::ActionsContextMenu);
+    QAction* removeAction = new QAction("Remove",ui->tagView);
+    ui->tagView->addAction(removeAction);
+
+    connect(removeAction,SIGNAL(triggered(bool)),this,SLOT(removeTag()));
 
     QPushButton* createTagButton = new QPushButton("New Tag");
     ui->leftSplitter->insertWidget(0,createTagButton);
@@ -70,6 +75,25 @@ MainWindow::MainWindow(QWidget *parent) :
 MainWindow::~MainWindow()
 {
     delete ui;
+}
+
+
+void MainWindow::removeTag(){
+    QModelIndexList selected = ui->tagView->selectionModel()->selectedIndexes();
+    QModelIndex index = selected[0];
+    QString name = index.data().toString();
+    QString parent = index.parent().data().toString();
+    if(!parent.isEmpty()){
+        QList<Tag> keys = tagManager->getKeys();
+        for(int i = 0; i<keys.size(); i++){
+            if(keys[i].getName() == name && keys[i].getParent()->getTagGroupName() == parent){
+                tagManager->removeTag(keys[i]);
+                break;
+            }
+        }
+        model->removeRow(index.row(),index.parent());
+    }
+    tagManager->saveHashTable();
 }
 
 void MainWindow::viewTags(QPoint i){

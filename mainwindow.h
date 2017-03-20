@@ -23,6 +23,8 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
+public slots:
+    void removeTag();
 private slots:
     void on_dirView_clicked(const QModelIndex &index);
 
