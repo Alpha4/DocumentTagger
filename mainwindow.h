@@ -38,6 +38,8 @@ private slots:
 
     void handleClick();
 
+    void viewTags(QPoint i);
+
 private:
     Ui::MainWindow *ui;
     QFileSystemModel* dirModel;

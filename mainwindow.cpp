@@ -9,6 +9,7 @@
 #include <tagitemdelegate.h>
 #include "tagviewdelegate.h"
 #include "tagmanager.h"
+#include "filestagframe.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -46,6 +47,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->filesView->setResizeMode(QListView::Adjust);
     ui->filesView->setIconSize(icon_size);
     ui->filesView->setRootIndex(findex);
+    ui->filesView->setContextMenuPolicy(Qt::CustomContextMenu);
 
     QFile* tagGroupFile = new QFile("/home/andrei/Documents/Work/qt/DocumentTagger/tagGroups.txt");
     QFile* tagFile = new QFile("/home/andrei/Documents/Work/qt/DocumentTagger/tags.txt");
@@ -60,13 +62,21 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->leftSplitter->insertWidget(0,createTagButton);
     connect(createTagButton,SIGNAL(clicked(bool)),this,SLOT(handleClick()));
     //connect(this,SIGNAL(destroyed(QObject*)),this,SLOT(saveModel()));
-
+    //connect(ui->filesView,SIGNAL(clicked(QModelIndex)),this,SLOT(viewTags(QModelIndex)));
+    connect(ui->filesView,SIGNAL(customContextMenuRequested(QPoint)),this,SLOT(viewTags(QPoint)));
 
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
+}
+
+void MainWindow::viewTags(QPoint i){
+    QModelIndex index = ui->filesView->indexAt(i);
+    QString path = fileModel->filePath(index);
+    FilesTagFrame* frame = new FilesTagFrame(tagManager,path,this);
+    frame->show();
 }
 
 void MainWindow::handleClick(){
@@ -142,6 +152,13 @@ void MainWindow::on_filesView_doubleClicked(const QModelIndex &index)
 
 void MainWindow::on_searchBar_textChanged(const QString &arg1)
 {
+    /*
+    QStringList keywords;
+    fileModel->setNameFilters(keywords);
+    if (arg1!="")
+        keywords << "*"+arg1+"*";
+    fileModel->setNameFilters(keywords);
+    */
     QStringList keywords;
     fileModel->setNameFilters(keywords);
     if (arg1!="")

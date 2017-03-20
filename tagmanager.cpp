@@ -23,11 +23,13 @@ TagManager::~TagManager(){
     */
 }
 
-void TagManager::addFile(Tag tag,QFile* f){
+void TagManager::addFile(Tag tag,QString f){
+    std::cout<<"before adding element in list"<<std::endl;
     tagHash[tag].push_back(f);
+    std::cout<<"after adding elem in list"<<std::endl;
 }
 
-void TagManager::removeFile(Tag tag, QFile *f){
+void TagManager::removeFile(Tag tag, QString f){
     tagHash[tag].removeOne(f);
 }
 
@@ -43,7 +45,7 @@ void TagManager::insertTagGroup(TagGroup *tagGroup)
 }
 
 void TagManager::addTag(Tag tag){
-    QList<QFile*> list;
+    QList<QString> list;
     tagHash.insert(tag,list);
 }
 
@@ -81,11 +83,11 @@ void TagManager::fillHashTable(){
         TagGroup* tagGroup = tagGroupHash[tagParent];
         Tag tag(tagGroup,tagName,&color);
         std::cout<<"color tag = "<<tag.getColor()->name().toStdString()<<std::endl;
-        QList<QFile*> listFiles;
+        QList<QString> listFiles;
         tagHash.insert(tag,listFiles);
         if(fields.size() > 2){
             for(int i=3; i<fields.size(); i++){
-                QFile* f = new QFile(fields[i]);
+                QString f = fields[i];
                 tagHash[tag].push_back(f);
             }
         }
@@ -113,9 +115,11 @@ void TagManager::saveHashTable(){
         std::cout<<it.key().getColor()->name().toStdString()<<std::endl;
         line.append(",");
         line.append(it.key().getParent()->getTagGroupName());
-        for(int i = 0; i < it->size(); i++){
+        QList<QString> files = it.value();
+        for(int i = 0; i < files.size(); i++){
             line.append(",");
-            line.append(it->at(i)->fileName());
+            std::cout<<"Writing on file: "<<files[i].toStdString()<<std::endl;
+            line.append(files[i]);
         }
         std::cout<<line.toStdString()<<std::endl;
         outf<<line<<endl;
@@ -168,5 +172,41 @@ QStandardItemModel* TagManager::createModel()
     return model;
 }
 
+QStandardItemModel* TagManager::createOnlyListModel()
+{
+    QStandardItemModel* model = new QStandardItemModel();
+    QStandardItem* parentItem = model->invisibleRootItem();
+    QList<Tag> keys = getKeys();
+    //construct the first nodes corresponding to groups
+    for(int i = 0; i< keys.size(); i++){
+        QStandardItem* item = new QStandardItem(keys[i].getName());
+        parentItem->appendRow(item);
+    }
 
+    return model;
+}
+
+QStandardItemModel* TagManager::createFilteredModel(QString string){
+    std::cout<<string.toStdString()<<std::endl;
+    QList<Tag> final;
+    std::cout<<final.size()<<std::endl;
+    QList<Tag> keys = this->getKeys();
+    for(int i=0; i<keys.size(); i++){
+        if(tagHash[keys[i]].contains(string)){
+            final.append(keys[i]);
+        }
+    }
+    std::cout<<final.size()<<std::endl;
+    QStandardItemModel* model = new QStandardItemModel();
+    QStandardItem* parentItem = model->invisibleRootItem();
+    if(final.size() == 0){
+        return model;
+    }
+    for(int i = 0; i<final.size(); i++){
+        QStandardItem* item = new QStandardItem(final[i].getName());
+        parentItem->appendRow(item);
+    }
+
+    return model;
+}
 
