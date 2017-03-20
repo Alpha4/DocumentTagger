@@ -7,7 +7,6 @@
 #include <QFile>
 #include <QLabel>
 #include <iostream>
-#include <tagitemdelegate.h>
 #include "tagviewdelegate.h"
 #include "tagmanager.h"
 #include "filestagframe.h"
@@ -41,7 +40,6 @@ MainWindow::MainWindow(QWidget *parent) :
     QSize icon_size(64,64);
     QModelIndex findex = fileModel->index(rootPath);
     ui->filesView->setModel(fileModel);
-    ui->filesView->setItemDelegate(new TagItemDelegate());
 
     ui->filesView->setViewMode(QListView::IconMode);
     ui->filesView->setGridSize(grid_size);
