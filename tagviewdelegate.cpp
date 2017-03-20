@@ -23,9 +23,9 @@ void TagViewDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
         //Tag* thisTag = NULL;
         for(int i = 0; i<tags.size(); i++){
             if(tags[i].getName() == d && tags[i].getParent()->getTagGroupName() == groupName){
-                //thisTag = &tags[i];
-                painter->setPen(QPen(*tags[i].getColor()));
-                painter->drawRect(option.rect.x()+1,option.rect.y(),option.rect.width(),option.rect.height());
+
+                painter->setBackground(QBrush(*tags[i].getColor()));
+                painter->setBackgroundMode(Qt::OpaqueMode);
                 break;
             }
         }
