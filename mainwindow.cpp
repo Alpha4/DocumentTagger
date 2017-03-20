@@ -2,6 +2,7 @@
 #include "ui_mainwindow.h"
 
 #include <QDesktopServices>
+#include <QAbstractItemView>
 #include <QUrl>
 #include <QFile>
 #include <QLabel>
@@ -55,7 +56,10 @@ MainWindow::MainWindow(QWidget *parent) :
     tagManager->fillHashTable();
     model = tagManager->createModel();
 
+
     ui->tagView->setModel(model);
+    ui->tagView->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    ui->tagView->setSelectionMode(QAbstractItemView::NoSelection);
     ui->tagView->setItemDelegate(new TagViewDelegate(tagManager,this));
     ui->tagView->setContextMenuPolicy(Qt::ActionsContextMenu);
     QAction* removeAction = new QAction("Remove",ui->tagView);
